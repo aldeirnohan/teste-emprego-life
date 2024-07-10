@@ -1,0 +1,1044 @@
+openapi: 3.0.3
+info:
+  title: Teste para vaga de emprego Para Life
+  description: |-
+    Pré-requisitos
+    Ambiente de Desenvolvimento: Certifique-se de ter um ambiente de desenvolvimento configurado com PHP, Composer e um servidor web (como Apache ou Nginx) com suporte ao PHP.
+
+    Banco de Dados: Verifique se o banco de dados está configurado e acessível com MySQL.
+    
+    Passos para Rodar o Projeto:
+    
+    Clonar o Projeto:
+
+    Clone o repositório do projeto do Git, se estiver usando controle de versão.
+    Instalar Dependências:
+    
+    Abra um terminal na raiz do projeto.
+    Execute o comando composer install para instalar todas as dependências do Laravel listadas no arquivo composer.json.
+    
+    Configurar o Arquivo .env:
+    
+    Faça uma cópia do arquivo .env.example e renomeie para .env.
+    Configure as variáveis de ambiente necessárias, como conexão com o banco de dados (DB_*).
+    
+    Rodar as Migrations:
+    
+    Para criar as tabelas no banco de dados, execute php artisan migrate no terminal. Isso criará as tabelas especificadas nas migrations do Laravel.
+    
+    Iniciar o Servidor:
+    
+    Para iniciar o servidor local do Laravel, execute php artisan serve. Isso iniciará um servidor de desenvolvimento na porta padrão (geralmente http://localhost:8000).
+  contact:
+    email: aldeir_nohan03@live.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+tags:
+  - name: usuario
+    description: Tudo sobre Usuario
+  - name: pacientes
+    description: Tudo sobre pacientes
+  - name: medicos
+    description: Tudo sobre medicos
+  - name: plano de saude
+    description: Tudo sobre planos de saude
+  - name: procedimentos
+    description: Tudo sobre procedimentos
+  - name: especialidades
+    description: Tudo sobre especialidades
+  - name: consultas
+    description: Tudo sobre consultas
+paths:
+  /register:
+    post:
+      tags:
+        - usuario
+      summary: Criação de um novo usuário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /login:
+    post:
+      tags:
+        - usuario
+      summary: Ingresar no sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username/password supplied
+  /logout:
+    get:
+      tags:
+        - usuario
+      summary: Sair do sistema
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /paciente:
+    post:
+      tags:
+        - pacientes
+      summary: Cria um novo paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+      responses:
+        '201':
+          description: Paciente criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+        '400':
+          description: Requisição inválida
+  /paciente/{id}:
+    get:
+      tags:
+        - pacientes
+      summary: Retorna um paciente específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paciente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+        '404':
+          description: Paciente não encontrado
+    put:
+      tags:
+        - pacientes
+      summary: Atualiza um paciente específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paciente'
+      responses:
+        '200':
+          description: Paciente atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paciente'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Paciente não encontrado
+    delete:
+      tags:
+        - pacientes
+      summary: Deleta um paciente específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Paciente deletado com sucesso
+        '404':
+          description: Paciente não encontrado
+  /paciente/showPlanos/{id}:
+    get:
+      tags:
+        - pacientes
+      summary: Retorna um paciente específico com seus planos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paciente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PacienteComPlano'
+        '404':
+          description: Paciente não encontrado
+  /pacientePlanoSaude:
+    post:
+      tags:
+        - pacientes
+      summary: Adiciona um plano de saude a um paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PacientePlanoSaude'
+      responses:
+        '201':
+          description: Plano adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PacientePlanoSaudeRetorno'
+        '400':
+          description: Requisição inválida
+  /medico:
+    post:
+      tags:
+        - medicos
+      summary: Cria um novo médico
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+      responses:
+        '201':
+          description: Médico criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'
+        '400':
+          description: Requisição inválida
+  /medico/{id}:
+    get:
+      tags:
+        - medicos
+      summary: Retorna um médico específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Médico encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'
+        '404':
+          description: Médico não encontrado
+    put:
+      tags:
+        - medicos
+      summary: Atualiza um médico específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medico'
+      responses:
+        '200':
+          description: Médico atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medico'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Médico não encontrado
+    delete:
+      tags:
+        - medicos
+      summary: Deleta um médico específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Médico deletado com sucesso
+        '404':
+          description: Médico não encontrado
+  /planoSaude:
+    post:
+      tags:
+        - plano de saude
+      summary: Cria um novo plano de saude
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanoSaude'
+      responses:
+        '201':
+          description: Plano de saude criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanoSaude'
+        '400':
+          description: Requisição inválida
+  /planoSaude/{id}:
+    get:
+      tags:
+        - plano de saude
+      summary: Retorna um plano de saude específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Plano de saude encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanoSaude'
+        '404':
+          description: Plano de saude não encontrado
+    put:
+      tags:
+        - plano de saude
+      summary: Atualiza um plano de saude específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanoSaude'
+      responses:
+        '200':
+          description: Plano de saude atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanoSaude'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Plano de saude não encontrado
+    delete:
+      tags:
+        - plano de saude
+      summary: Deleta um plano de saude específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Plano de saude deletado com sucesso
+        '404':
+          description: Plano de saude não encontrado
+  /procedimento:
+    post:
+      tags:
+        - procedimentos
+      summary: Cria um novo procedimento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Procedimento'
+      responses:
+        '201':
+          description: Procedimento criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Procedimento'
+        '400':
+          description: Requisição inválida
+  /procedimento/{id}:
+    get:
+      tags:
+        - procedimentos
+      summary: Retorna um procedimento específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Procedimento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Procedimento'
+        '404':
+          description: Procedimento não encontrado
+    put:
+      tags:
+        - procedimentos
+      summary: Atualiza um procedimento específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Procedimento'
+      responses:
+        '200':
+          description: Procedimento atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Procedimento'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Procedimento não encontrado
+    delete:
+      tags:
+        - procedimentos
+      summary: Deleta um procedimento específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Procedimento deletado com sucesso
+        '404':
+          description: Procedimento não encontrado
+  /especialidade:
+    post:
+      tags:
+        - especialidades
+      summary: Cria uma nova especialidade
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Especialidade'
+      responses:
+        '201':
+          description: Especialidade criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspecialidadeRetorno'
+        '400':
+          description: Requisição inválida
+  /especialidade/{id}:
+    get:
+      tags:
+        - especialidades
+      summary: Retorna uma especialidade específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Especialidade encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspecialidadeRetorno'
+        '404':
+          description: Especialidade não encontrada
+    put:
+      tags:
+        - especialidades
+      summary: Atualiza uma especialidade específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Especialidade'
+      responses:
+        '200':
+          description: Especialidade atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EspecialidadeRetorno'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Especialidade não encontrada
+    delete:
+      tags:
+        - especialidades
+      summary: Deleta uma especialidade específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Especialidade deletada com sucesso
+        '404':
+          description: Especialidade não encontrada
+  /consulta:
+    post:
+      tags:
+        - consultas
+      summary: Cria uma nova consulta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consulta'
+      responses:
+        '201':
+          description: Consulta criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaRetorno'
+        '400':
+          description: Requisição inválida
+  /consultaProcedimento:
+    post:
+      tags:
+        - consultas
+      summary: Adiciona um novo procedimento a uma consulta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsultaProcedimento'
+      responses:
+        '201':
+          description: Procedimento adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaProcedimentoRetorno'
+        '400':
+          description: Requisição inválida
+  /consulta/{id}:
+    get:
+      tags:
+        - consultas
+      summary: Retorna uma consulta específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaRetorno'
+        '404':
+          description: Consulta não encontrada
+    put:
+      tags:
+        - consultas
+      summary: Atualiza uma consulta específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consulta'
+      responses:
+        '200':
+          description: Consulta atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaRetorno'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Consulta não encontrada
+    delete:
+      tags:
+        - consultas
+      summary: Deleta uma consulta específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Consulta deletada com sucesso
+        '404':
+          description: Consulta não encontrada
+  /consulta/showProcedimentos/{id}:
+    get:
+      tags:
+        - consultas
+      summary: Retorna uma consulta específica com os procedimentos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultaComProcedimentoRetorno'
+        '404':
+          description: Consulta não encontrada
+components:
+  schemas:
+    Paciente:
+      type: object
+      required:
+        - pac_nome
+        - pac_dataNascimento
+        - pac_telefones
+      properties:
+        pac_nome:
+          type: string
+          example: "segundo teste"
+        pac_dataNascimento:
+          type: string
+          format: date
+          example: "1998-04-23"
+        pac_telefones:
+          type: array
+          items:
+            type: string
+          example:
+            - "77 156156155"
+            - "77 851551565"
+    PacientePlanoSaude:
+      type: object
+      required:
+        - pac_codigo
+        - plano_codigo
+        - pps_nrContrato
+      properties:
+        pac_codigo:
+          type: integer
+          example: 1
+        plano_codigo:
+          type: integer
+          example: 3
+        pps_nrContrato:
+          type: string
+          example: "0001"
+    PacientePlanoSaudeRetorno:
+      type: object
+      properties:
+        pps_codigo:
+          type: integer
+          example: 3
+        pac_codigo:
+          type: integer
+          example: 1
+        plano_codigo:
+          type: integer
+          example: 3
+        pps_nrContrato:
+          type: string
+          example: "0001"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - pac_codigo
+        - plano_codigo
+        - pps_nrContrato
+    PacienteComPlano:
+      type: object
+      properties:
+        pac_codigo:
+          type: integer
+          example: 1
+        pac_nome:
+          type: string
+          example: "teste"
+        pac_dataNascimento:
+          type: string
+          format: date
+          example: "1998-04-23"
+        pac_telefones:
+          type: array
+          items:
+            type: string
+          example:
+            - "77 991261243"
+            - "77 981191855"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T21:35:32.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T21:35:32.000000Z"
+        plano_saudes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanoSaudeComRetorno'
+    PlanoSaudeComRetorno:
+      type: object
+      properties:
+        plano_codigo:
+          type: integer
+          example: 1
+        plano_descricao:
+          type: string
+          example: "plano teste"
+        plano_telefone:
+          type: string
+          example: "77 98191855"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T21:47:33.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T21:47:33.000000Z"
+        laravel_through_key:
+          type: integer
+          example: 1
+    Medico:
+      type: object
+      properties:
+        med_codigo:
+          type: integer
+          example: 1
+        espec_codigo:
+          type: integer
+          example: 1
+        med_nome:
+          type: string
+          example: "medico teste"
+        med_CRM:
+          type: string
+          example: "CRMteste"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T22:44:28.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T22:44:28.000000Z"
+    PlanoSaude:
+      type: object
+      properties:
+        plano_descricao:
+          type: string
+          example: "plano teste3"
+        plano_telefone:
+          type: string
+          example: "77 98191855"
+    Procedimento:
+      type: object
+      properties:
+        proc_codigo:
+          type: integer
+          example: 2
+        proc_nome:
+          type: string
+          example: "procedimento teste2"
+        proc_valor:
+          type: string
+          example: "100,00"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T23:38:00.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T23:38:00.000000Z"
+        laravel_through_key:
+          type: integer
+          example: 5
+    Especialidade:
+      type: object
+      required:
+        - espec_nome
+      properties:
+        espec_nome:
+          type: string
+          example: "especialidade teste"
+    EspecialidadeRetorno:
+      type: object
+      properties:
+        espec_codigo:
+          type: integer
+          example: 1
+        espec_nome:
+          type: string
+          example: especialidade teste
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T22:12:34.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-09T22:12:34.000000Z"
+    Consulta:
+      type: object
+      required:
+        - cons_data
+        - cons_hora
+        - pac_codigo
+        - med_codigo
+      properties:
+        cons_data:
+          type: string
+          format: date
+          example: "2024-07-09"
+        cons_hora:
+          type: string
+          format: time
+          example: "16:00:00"
+        cons_privado:
+          type: boolean
+          example: true
+        pac_codigo:
+          type: integer
+          example: 2
+        med_codigo:
+          type: integer
+          example: 1
+    ConsultaProcedimento:
+      type: object
+      required:
+        - cons_codigo
+        - proc_codigo
+      properties:
+        cons_codigo:
+          type: integer
+          example: 2
+        proc_codigo:
+          type: integer
+          example: 1
+    ConsultaProcedimentoRetorno:
+      type: object
+      properties:
+        cons_codigo:
+          type: string
+          example: "5"
+        proc_codigo:
+          type: string
+          example: "2"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:43.000000Z"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:43.000000Z"
+        cp_codigo:
+          type: integer
+          example: 3
+    ConsultaRetorno:
+      type: object
+      properties:
+        cons_data:
+          type: string
+          format: date
+          example: "2024-07-09"
+        cons_hora:
+          type: string
+          format: time
+          example: "16:00:00"
+        cons_privado:
+          type: boolean
+          format: "true"
+        pac_codigo:
+          type: integer
+          example: 2
+        med_codigo:
+          type: integer
+          example: 1
+        pps_codigo:
+          type: integer
+          nullable: true
+          example: null
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:12.000000Z"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:12.000000Z"
+        cons_codigo:
+          type: integer
+          example: 5
+    ConsultaComProcedimentoRetorno:
+      type: object
+      properties:
+        cons_codigo:
+          type: integer
+          example: 5
+        pac_codigo:
+          type: integer
+          example: 2
+        med_codigo:
+          type: integer
+          example: 1
+        pps_codigo:
+          type: integer
+          nullable: true
+          example: null
+        cons_data:
+          type: string
+          format: date
+          example: "2024-07-09"
+        cons_hora:
+          type: string
+          format: time
+          example: "16:00:00"
+        cons_particular:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:12.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-07-10T01:59:12.000000Z"
+        paciente:
+          $ref: '#/components/schemas/Paciente'
+        medico:
+          $ref: '#/components/schemas/Medico'
+        paciente_plano_saude:
+          type: object
+          nullable: true
+          example: null
+        procedimentos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Procedimento'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '123456'
+      xml:
+        name: user
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '123456'
+  requestBodies:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
